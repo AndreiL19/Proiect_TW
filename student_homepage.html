@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Echipa Proiect">
+        <meta name="keywords" content="annonymous,annonymousgrading">
+        <meta name="description" content="Annonymous Grading System">
+        <title>Annonymous Grading System</title>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+
+    <style>
+        .new_project {
+            flex: 1;
+            text-align: center;
+            border: 5px solid darkmagenta;
+            border-radius: 30px;
+            background-color: aliceblue;
+            border-radius: 50px;
+            margin: 15px;
+            padding-top: 15px;
+        }
+
+        .new_deliverable {
+            flex: 1;
+            text-align: center;
+            border: 5px solid darkmagenta;
+            border-radius: 50px;
+            background-color: aliceblue;
+            margin: 15px;
+            padding-top: 15px;
+        }
+
+        .wrapper {
+            display: flex;
+            text-align:center;
+            margin-top: 35px;
+        }
+
+        html, body {
+            background-color: lightblue;
+            width: 100%;
+            height: 100%;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        #project_submission {
+            margin-top: 35px;
+            margin-bottom: 65px;
+        }
+
+        #demo_submission {
+            margin-top: 35px;
+            margin-bottom: 65px;
+        }
+
+        #review {
+            width:max-content;
+        }
+        .voting_system {
+            text-align: center;
+            border: 5px solid darkmagenta;
+            border-radius: 50px;
+            background-color: aliceblue;
+            margin: 15px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+
+        }
+
+        input:placeholder-shown {
+            font-style: italic;
+         }
+
+    </style>
+
+    <body>
+        <script src="annonymous_grading.js"></script>
+        <div class="wrapper">
+            <div class="new_project">
+                <h1 style="text-align:center; color:darkblue;"> Add a project! </h1>
+                <hr/>
+                <br>
+                <form action="/student_homepage_project_register", method="post"> 
+                    <label for="project_name"> Project title: </label><br><br>
+                    <input type="text" id="project_name" name="project_name" placeholder="Project title..."><br>
+                    <br>
+                    <label for="project_description"> Project description: </label><br><br>
+                    <textarea rows="15" cols="35" id="project_description" name="project_description" placeholder="Project description..."></textarea><br>
+                    <br>
+                    <label for="project_creation_date"> Creation date: </label><br><br>
+                    <input type="date" id="project_creation_date" name="project_creation_date" placeholder="Project creation date..."><br>
+                    <br>
+                    <input type="submit" value="Register Project!" id="project_submission"> 
+                </form>
+            </div>
+            <div class="new_deliverable">
+                <h1 style="text-align:center; color:darkblue;"> Add a demo! </h1>
+                <hr/>
+                <br>
+                <form action="/student_homepage_deliverable_register", method="post"> 
+                    <label for="project_name"> Project title: </label><br><br>
+                    <select name="deliverables" id="deliverables">
+                        <script>
+                            $.get('/student_homepage_deliverables',function(data){
+                                for(var i = 0; i < data.length; i++)
+                                {   
+                                    var seen = false;
+                                    for (var j = i + 1; j < data.length; j++) {
+                                        if (data[i].project_id == data[j].project_id) {
+                                            seen = true;
+                                        }
+                                    }
+                                        if (seen == false) {
+                                        var newOption = $('<option>');
+                                        newOption.text(data[i].project_id + ' ' + data[i].title);
+                                        $("#deliverables").append(newOption);
+                                    }
+                                    
+                                }
+
+                            });
+                         </script>
+                    </select>
+                    <br><br>
+                    <label for="deliverable"> Deliverable Title: </label><br><br>
+                    <input type="text" id="deliverable_title" name="deliverable_title" placeholder="Deliverable title..."><br><br>
+                    <label for="deliverable"> Deliverable description: </label><br><br>
+                    <textarea rows="15" cols="35" id="deliverable_description" name="deliverable_description" placeholder="Deliverable description..."></textarea><br>
+                    <label for="deliverable"> Deliverable: </label><br><br>
+                    <input type="url" id="deliverable" name="deliverable" placeholder="Deliverable..."><br>
+                    <br>
+                    <input type="submit" value="Submit Demo!" id="demo_submission"> 
+                </form>
+            </div>
+        </div>
+        <div class="voting_system">
+            <form action="/student_review", method="post">
+                <label for="select_project"> Select projects for review! </label><br><br>
+                <select name="projects" id="projects">
+                    <script>
+                        $.get('/student_homepage_dropdownlist',function(data){
+                            for(var i = 0; i < data.length; i++)
+                            {
+                                var newOption = $('<option>');
+                                newOption.text(data[i].project_id + ' ' + data[i].title);
+                                $("#projects").append(newOption);
+                            }
+                        });
+                     </script>
+                </select>
+                <input type="number" id="review" name="review" step="0.25" min="1" max="10" placeholder="Review...">
+                <input type="submit" value="Submit Review!" id="review_submission">
+            </form> 
+        </div>
+    </body>
+
+
+</html>

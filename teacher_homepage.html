@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Echipa Proiect">
+        <meta name="keywords" content="annonymous,annonymousgrading">
+        <meta name="description" content="Annonymous Grading System">
+        <title>Annonymous Grading System</title>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+
+    <style>
+        html, body {
+            background-color: lightskyblue;
+        }
+        #myTable {
+            border-collapse: collapse;
+            width: 100%;
+            border: 8px solid #ddd;
+            font-size: 18px;
+          }
+          
+          #myTable th, #myTable td {
+            text-align: left;
+            padding: 12px;
+          }
+          
+          #myTable tr {
+            border-bottom: 1px solid #ddd;
+          }
+          
+          #myTable tr.header, #myTable tr:hover {
+            background-color: #f1f1f1;
+          }
+    </style>
+
+    <body>
+        <table id="myTable" name="myTable">
+            <script>
+                $.get('/teacher_homepage_list',function(data){
+                    for(var i = 0; i < data.length; i++)
+                    {
+                        var newItem = $('<tr>');
+                        var row = $('<td>');
+                        row.append(data[i].title);
+                        newItem.append(row);
+                        row = $('<td>');
+                        row.append(data[i].review_value);
+                        newItem.append(row);
+                        $("#myTable").append(newItem);
+                    }
+                });
+            </script>
+        </table>
+    </body>
+</html>
